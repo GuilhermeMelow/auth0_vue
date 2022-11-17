@@ -1,14 +1,24 @@
 <template>
+  <div>
+    Access Token: <b>{{ accessToken }}</b>
+  </div>
   <button @click="login">Log in</button>
 </template>
 
 <script setup>
 import { useAuth0 } from "@auth0/auth0-vue";
+import { onMounted, ref } from "vue";
 
-const { loginWithRedirect } = useAuth0();
+const { loginWithRedirect, getAccessTokenSilently } = useAuth0();
 
-const login = () => {
-  loginWithRedirect();
+const accessToken = ref("");
+
+onMounted(async () => {
+  accessToken.value = await getAccessTokenSilently();
+});
+
+const login = async () => {
+  await loginWithRedirect();
 };
 </script>
 
